@@ -88,7 +88,9 @@ function DashboardSidebar() {
                     <SidebarMenuButton className="flex items-center">
                       <Avatar className="size-6">
                         <AvatarImage src={user.image} />
-                        <AvatarFallback>{user.username[0]}</AvatarFallback>
+                        <AvatarFallback>
+                          {user?.username?.[0] || "U"}
+                        </AvatarFallback>
                       </Avatar>
                       <p className="font-medium">{user.username}</p>
                     </SidebarMenuButton>
