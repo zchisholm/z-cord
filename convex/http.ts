@@ -42,20 +42,37 @@ http.route({
 });
 
 const validateRequest = async (req: Request) => {
-  const svix_id = req.headers.get("svix-id");
-  const svix_timestamp = req.headers.get("svix-timestamp");
-  const svix_signature = req.headers.get("svix-signature");
+  // Log all headers by converting them to an object
+  const headersObj: Record<string, string> = {};
+  req.headers.forEach((value, key) => {
+    headersObj[key] = value;
+  });
+  console.log("Incoming headers:", headersObj);
+
+  const svix_id = req.headers.get("svix-id") || req.headers.get("svix-id");
+  const svix_timestamp =
+    req.headers.get("svix-timestamp") || req.headers.get("svix-timestamp");
+  const svix_signature =
+    req.headers.get("svix-signature") || req.headers.get("svix-signature");
+
+  if (!svix_id || !svix_timestamp || !svix_signature) {
+    console.error("Missing required headers for verification");
+    return null;
+  }
 
   const text = await req.text();
 
   try {
     const webhook = new Webhook(process.env.CLERK_WEBHOOK_SECRET!);
-    return webhook.verify(text, {
-      "svix_id": svix_id!,
-      "svix_timestamp": svix_timestamp!,
-      "svix_signature": svix_signature!,
+    const event = webhook.verify(text, {
+      "svix-id": svix_id!,
+      "svix-timestamp": svix_timestamp!,
+      "svix-signature": svix_signature!,
     }) as unknown as WebhookEvent;
+    console.log("Webhook verified successfully:", event);
+    return event;
   } catch (error) {
+    console.error("Webhook verification failed:", error);
     return null;
   }
 };

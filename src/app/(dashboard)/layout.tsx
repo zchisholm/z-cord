@@ -50,7 +50,11 @@ function DashboardSidebar() {
   const user = useQuery(api.functions.user.get);
 
   if (!user) {
-    return null;
+    return (
+      <div>
+        <h1>No User Data Found</h1>
+      </div>
+    );
   }
 
   return (
@@ -61,7 +65,7 @@ function DashboardSidebar() {
             <SidebarMenu>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
-                  <Link href="/friends">
+                  <Link href="/(dashboard)/friends">
                     <User2Icon />
                     Friends
                   </Link>
