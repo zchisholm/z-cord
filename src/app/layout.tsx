@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ConvexClientProvider } from "./convex-client-provider";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Z-Cord",
@@ -16,10 +17,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <ClerkProvider
-          dynamic
-        >
-          <ConvexClientProvider>{children}</ConvexClientProvider>
+        <ClerkProvider dynamic>
+          <ConvexClientProvider>
+            {children}
+            <Toaster />
+          </ConvexClientProvider>
         </ClerkProvider>
       </body>
     </html>
