@@ -88,15 +88,28 @@ function MessageItem({ message }: { message: Message }) {
         <p className="text-xs text-muted-foreground">
           {message.sender?.username ?? "Deleted User"}
         </p>
-        <p className="text-sm">{message.content}</p>
-        {message.attachment && (
-          <Image
-            src={message.attachment}
-            alt="Attachment"
-            width={300}
-            height={300}
-            className="rounded border overflow-hidden"
-          />
+        {message.deleted ? (
+          <p className="text-sm text-destructive">
+            This message was deleted. 
+            {message.deletedReason && (
+              <span>
+                Reason: {message.deletedReason}
+              </span>
+            )}
+          </p>
+        ) : (
+          <>
+            <p className="text-sm">{message.content}</p>
+            {message.attachment && (
+              <Image
+                src={message.attachment}
+                alt="Attachment"
+                width={300}
+                height={300}
+                className="rounded border overflow-hidden"
+              />
+            )}
+          </>
         )}
       </div>
       <MessageActions message={message} />
@@ -200,9 +213,12 @@ function MessageInput({
               onDelete={() => {
                 if (attachment) {
                   removeAttachment({ storageId: attachment });
-                  }
-                  setAttachment(undefined);
-                  setFile(undefined);
+                }
+                setAttachment(undefined);
+                setFile(undefined);
+                if (fileInputRef.current) {
+                  fileInputRef.current.value = "";
+                }
               }}
             />
           )}
@@ -243,7 +259,7 @@ function ImagePreview({
   onDelete: () => void;
 }) {
   return (
-    <div className="relative size-40 overflow-hidden rounded border">
+    <div className="relative size-40 overflow-hidden rounded border group">
       <Image
         src={URL.createObjectURL(file)}
         alt="Attachment"
@@ -258,7 +274,7 @@ function ImagePreview({
       )}
       <Button
         type="button"
-        className="absolute top-2 right-2"
+        className="absolute top-2 right-2 group-hover:opacity-100 opacity-0 transition-opacity"
         variant="destructive"
         size="icon"
         onClick={onDelete}
