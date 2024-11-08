@@ -41,7 +41,7 @@ export const upsert = authenticatedMutation({
       )
       .unique();
 
-    const expiresAt = Date.now() + 5000;
+    const expiresAt = Date.now() + 2000;
     if (existing) {
       await ctx.db.patch(existing._id, { expiresAt });
     } else {
