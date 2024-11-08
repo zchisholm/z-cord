@@ -51,7 +51,26 @@ export default function MessagePage({
           <MessageItem key={message._id} message={message} />
         ))}
       </ScrollArea>
+      <TypingIndicator directMessage={id} />
       <MessageInput directMessage={id} />
+    </div>
+  );
+}
+
+function TypingIndicator({
+  directMessage,
+}: {
+  directMessage: Id<"directMessages">;
+}) {
+  const usernames = useQuery(api.functions.typing.list, { directMessage });
+
+  if (!usernames || usernames.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="text-sm text-muted-foreground px-4 py-2">
+      {usernames.join(", ")} is typing...
     </div>
   );
 }
@@ -123,16 +142,16 @@ function MessageInput({
   const generateUploadUrl = useMutation(
     api.functions.message.generateUploadUrl
   );
-    const [attachment, setAttachment] = useState<Id<"_storage">>();
-    const [file, setFile] = useState<File>();
-    const [isUploading, setIsUploading] = useState(false);
+  const [attachment, setAttachment] = useState<Id<"_storage">>();
+  const [file, setFile] = useState<File>();
+  const [isUploading, setIsUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-      setFile(file);
-      setIsUploading(true);
+    setFile(file);
+    setIsUploading(true);
     const url = await generateUploadUrl();
     const res = await fetch(url, {
       method: "POST",
@@ -140,8 +159,8 @@ function MessageInput({
     });
 
     const { storageId } = (await res.json()) as { storageId: Id<"_storage"> };
-      setAttachment(storageId);
-      setIsUploading(false);
+    setAttachment(storageId);
+    setIsUploading(false);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -149,8 +168,8 @@ function MessageInput({
     try {
       await sendMessage({ directMessage, attachment, content });
       setContent("");
-        setAttachment(undefined);
-        setFile(undefined);
+      setAttachment(undefined);
+      setFile(undefined);
     } catch (error) {
       toast.error("Failed to send message.", {
         description:
@@ -173,9 +192,7 @@ function MessageInput({
           <span className="sr-only">Attach</span>
         </Button>
         <div className="flex flex-col flex-1 gap-2">
-          {file && (
-            <ImagePreview file={file} isUploading={isUploading} />
-          )}
+          {file && <ImagePreview file={file} isUploading={isUploading} />}
           <Input
             placeholder="Message"
             value={content}
