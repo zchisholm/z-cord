@@ -43,7 +43,7 @@ export function MainSidebar() {
                     <Link
                       href={`/servers/${server._id}/channels/${server.defaultChannelId}`}
                     >
-                      <Avatar>
+                      <Avatar className="rounded-none">
                         {server.iconUrl && <AvatarImage src={server.iconUrl} />}
                         <AvatarFallback>{server.name[0]}</AvatarFallback>
                       </Avatar>

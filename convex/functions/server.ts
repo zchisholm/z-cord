@@ -67,7 +67,8 @@ export const members = authenticatedQuery({
       serverMembers.map(async ({ userId }) => {
         return await ctx.db.get(userId);
       })
-    );
+      );
+      return users.filter((user) => user !== null);
   },
 });
 
