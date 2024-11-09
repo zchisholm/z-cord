@@ -1,4 +1,5 @@
 "use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +10,7 @@ import {
 import { useMutation, useQuery } from "convex/react";
 import { CheckIcon, MessageCircleIcon, XIcon } from "lucide-react";
 import React from "react";
-import { api } from "../../../../convex/_generated/api";
+import { api } from "../../../../../convex/_generated/api";
 import { cn } from "@/lib/utils";
 
 export function PendingFriendsList() {
@@ -36,9 +37,14 @@ export function PendingFriendsList() {
             title="Accept"
             icon={<CheckIcon />}
             className="bg-green-100"
-            onClick={() => updateStatus({ id: friend._id, status: "accepted"})}
+            onClick={() => updateStatus({ id: friend._id, status: "accepted" })}
           />
-          <IconButton title="Reject" icon={<XIcon />} className="bg-red-100" onClick={() => updateStatus({ id: friend._id, status: "rejected"})}/>
+          <IconButton
+            title="Reject"
+            icon={<XIcon />}
+            className="bg-red-100"
+            onClick={() => updateStatus({ id: friend._id, status: "rejected" })}
+          />
         </FriendItem>
       ))}
     </div>
@@ -63,12 +69,16 @@ export function AcceptedFriendsList() {
           username={friend.user.username}
           image={friend.user.image}
         >
-          <IconButton title="Start DM" icon={<MessageCircleIcon />} onClick={() => {}}/>
+          <IconButton
+            title="Start DM"
+            icon={<MessageCircleIcon />}
+            onClick={() => {}}
+          />
           <IconButton
             title="Remove Friend"
             icon={<XIcon />}
-              className="bg-red-100"
-              onClick={() => updateStatus({ id: friend._id, status: "rejected"})}
+            className="bg-red-100"
+            onClick={() => updateStatus({ id: friend._id, status: "rejected" })}
           />
         </FriendItem>
       ))}
@@ -92,8 +102,8 @@ function IconButton({
 }: {
   title: string;
   className?: string;
-    icon: React.ReactNode;
-    onClick: () => void;
+  icon: React.ReactNode;
+  onClick: () => void;
 }) {
   return (
     <Tooltip>
