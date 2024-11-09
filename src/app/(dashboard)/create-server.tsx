@@ -56,7 +56,7 @@ export function CreateServer() {
         <DialogHeader>
           <DialogTitle>Create Server</DialogTitle>
         </DialogHeader>
-        <form className="contents">
+        <form className="contents" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-2">
             <Label htmlFor="name">Name</Label>
             <Input
