@@ -33,7 +33,24 @@ export const authenticatedMutation = customMutation(
   })
 );
 
-export const assertMember = async (
+export const assertServerMember = async (
+  ctx: AuthenticatedQueryCtx,
+  serverId: Id<"servers">
+) => {
+  const serverMember = await ctx.db
+    .query("serverMembers")
+    .withIndex("by_serverId_userId", (q) =>
+      q.eq("serverId", serverId).eq("userId", ctx.user._id)
+    )
+    .unique();
+
+  if (!serverMember) {
+    throw new Error("You are not a member of this server");
+  }
+};
+
+
+export const assertChannelMember = async (
   ctx: AuthenticatedQueryCtx,
   dmOrChannelId: Id<"directMessages" | "channels">
 ) => {
@@ -57,7 +74,7 @@ export const assertMember = async (
       .query("directMessageMembers")
       .withIndex("by_direct_message_user", (q) =>
         q.eq("directMessage", dmOrChannel._id).eq("user", ctx.user._id)
-    )
+      )
       .unique();
     if (!directMessageMember) {
       throw new Error("You are not a member of this direct message.");
