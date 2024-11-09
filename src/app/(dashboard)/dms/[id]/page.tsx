@@ -31,7 +31,7 @@ export default function MessagePage({
     id,
   });
   const messages = useQuery(api.functions.message.list, {
-    directMessage: id,
+    dmOrChannelId: id,
   });
 
   if (!directMessage) {
@@ -51,18 +51,18 @@ export default function MessagePage({
           <MessageItem key={message._id} message={message} />
         ))}
       </ScrollArea>
-      <TypingIndicator directMessage={id} />
-      <MessageInput directMessage={id} />
+      <TypingIndicator dmOrChannelId={id} />
+      <MessageInput dmOrChannelId={id} />
     </div>
   );
 }
 
 function TypingIndicator({
-  directMessage,
+  dmOrChannelId,
 }: {
-  directMessage: Id<"directMessages">;
+  dmOrChannelId: Id<"directMessages">;
 }) {
-  const usernames = useQuery(api.functions.typing.list, { directMessage });
+  const usernames = useQuery(api.functions.typing.list, { dmOrChannelId });
 
   if (!usernames || usernames.length === 0) {
     return null;
@@ -145,15 +145,15 @@ function MessageActions({ message }: { message: Message }) {
 }
 
 function MessageInput({
-  directMessage,
+  dmOrChannelId,
 }: {
-  directMessage: Id<"directMessages">;
+  dmOrChannelId: Id<"directMessages">;
 }) {
   const [content, setContent] = useState("");
   const sendMessage = useMutation(api.functions.message.create);
   const sendTypingIndicator = useMutation(api.functions.typing.upsert);
   const generateUploadUrl = useMutation(
-    api.functions.message.generateUploadUrl
+    api.functions.storage.generateUploadUrl
   );
   const removeAttachment = useMutation(api.functions.storage.remove);
   const [attachment, setAttachment] = useState<Id<"_storage">>();
@@ -180,7 +180,7 @@ function MessageInput({
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      await sendMessage({ directMessage, attachment, content });
+      await sendMessage({ dmOrChannelId, attachment, content });
       setContent("");
       setAttachment(undefined);
       setFile(undefined);
@@ -228,7 +228,7 @@ function MessageInput({
             onChange={(e) => setContent(e.target.value)}
             onKeyDown={(e) => {
               if (content.length > 0) {
-                sendTypingIndicator({ directMessage });
+                sendTypingIndicator({ dmOrChannelId });
               }
             }}
           />
