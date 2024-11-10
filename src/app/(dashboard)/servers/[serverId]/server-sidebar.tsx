@@ -64,13 +64,9 @@ export function ServerSidebar({ id }: { id: Id<"servers"> }) {
                     }
                     asChild
                   >
-                    {channel ? (
-                      <Link href={`/servers/${id}/channels/${channel._id}`}>
-                        {channel.name}
-                      </Link>
-                    ) : (
-                      <span>Channel not found</span>
-                    )}
+                    <Link href={`/servers/${id}/channels/${channel._id}`}>
+                      {channel.name}
+                    </Link>
                   </SidebarMenuButton>
                   <SidebarMenuAction
                     onClick={() => handleChannelDelete(channel._id)}
@@ -84,13 +80,15 @@ export function ServerSidebar({ id }: { id: Id<"servers"> }) {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter>
-        <SidebarGroupContent>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <Voice serverId={id} />
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroupContent>
+        <SidebarGroup>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <Voice serverId={id} />
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
       </SidebarFooter>
     </Sidebar>
   );
