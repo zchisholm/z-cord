@@ -1,30 +1,30 @@
 "use client";
 
+import { useImageUpload } from "@/hooks/use-image-upload";
 import { useMutation, useQuery } from "convex/react";
 import { FunctionReturnType } from "convex/server";
 import {
-  LoaderIcon,
-  MoreVerticalIcon,
-  PlusIcon,
-  SendIcon,
-  TrashIcon,
+    LoaderIcon,
+    MoreVerticalIcon,
+    PlusIcon,
+    SendIcon,
+    TrashIcon,
 } from "lucide-react";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { api } from "../../convex/_generated/api";
 import { Id } from "../../convex/_generated/dataModel";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Button } from "./ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Input } from "./ui/input";
 import { ScrollArea } from "./ui/scroll-area";
-import { useImageUpload } from "@/hooks/use-image-upload";
 
 export function Messages({ id }: { id: Id<"directMessages" | "channels"> }) {
   const messages = useQuery(api.functions.message.list, {

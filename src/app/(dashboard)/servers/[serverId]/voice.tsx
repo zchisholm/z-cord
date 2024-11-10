@@ -1,19 +1,19 @@
 "use client";
 
-import "@livekit/components-styles";
-import { LiveKitRoom, VideoConference } from "@livekit/components-react";
-import { useQuery } from "convex/react";
-import { Id } from "../../../../../convex/_generated/dataModel";
-import { api } from "../../../../../convex/_generated/api";
 import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogTrigger,
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogTrigger,
 } from "@/components/ui/dialog";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
+import { LiveKitRoom, VideoConference } from "@livekit/components-react";
+import "@livekit/components-styles";
+import { useQuery } from "convex/react";
 import { PhoneIcon } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { api } from "../../../../../convex/_generated/api";
+import { Id } from "../../../../../convex/_generated/dataModel";
 
 export function Voice({ serverId }: { serverId: Id<"servers"> }) {
   const token = useQuery(api.functions.livekit.getToken, { serverId });
