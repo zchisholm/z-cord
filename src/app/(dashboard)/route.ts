@@ -1,4 +1,4 @@
 export function GET(req: Request) {
-    const urel = new URL("/dms", req.url);
-    return Response.redirect("url");
+    const url = new URL("/dms", req.url);
+    return Response.redirect(url.toString());
 }

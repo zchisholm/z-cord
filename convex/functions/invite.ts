@@ -3,17 +3,16 @@ import { assertServerMember, authenticatedMutation } from "./helpers";
 import { Id } from "../_generated/dataModel";
 import { query, QueryCtx } from "../_generated/server";
 
-
 const getInvite = async (ctx: QueryCtx, inviteId: Id<"invites">) => {
-    const invite = await ctx.db.get(inviteId);
-    if (!invite) {
-        throw new Error("Invite not found.")
-    } else if (invite.expiresAt && Date.now() > invite.expiresAt) {
-        throw new Error("Invite expired");
-    } else if (invite.maxUses && invite.uses >= invite.maxUses) {
-        throw new Error("Invite has been used too many times");
-    }
-    return invite;
+  const invite = await ctx.db.get(inviteId);
+  if (!invite) {
+    throw new Error("Invite not found.");
+  } else if (invite.expiresAt && Date.now() > invite.expiresAt) {
+    throw new Error("Invite expired");
+  } else if (invite.maxUses && invite.uses >= invite.maxUses) {
+    throw new Error("Invite has been used too many times");
+  }
+  return invite;
 };
 
 export const get = query({
@@ -31,7 +30,6 @@ export const get = query({
     };
   },
 });
-
 
 export const create = authenticatedMutation({
   args: {
@@ -55,12 +53,19 @@ export const join = authenticatedMutation({
   args: { id: v.id("invites") },
   handler: async (ctx, { id }) => {
     const invite = await getInvite(ctx, id);
+    const existingMember = await ctx.db
+      .query("serverMembers")
+      .withIndex("by_serverId_userId", (q) =>
+        q.eq("serverId", invite.serverId).eq("userId", ctx.user._id)
+      )
+      .unique();
+    if (existingMember) return;
     await ctx.db.insert("serverMembers", {
       serverId: invite.serverId,
       userId: ctx.user._id,
     });
-      await ctx.db.patch(id, {
-          uses: invite.uses + 1
-      })
+    await ctx.db.patch(id, {
+      uses: invite.uses + 1,
+    });
   },
 });

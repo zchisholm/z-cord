@@ -52,7 +52,7 @@ export function CreateInvite({ serverId }: { serverId: Id<"servers"> }) {
         </Button>
       </DialogTrigger>
       {inviteId ? (
-        <CreatedInvite inviteId={inviteId} onClose={() => setInviteId(null)}/>
+        <CreatedInvite inviteId={inviteId} onClose={() => setInviteId(null)} />
       ) : (
         <CreateInviteForm onSubmit={handleSubmit} />
       )}
@@ -130,8 +130,8 @@ function CreateInviteForm({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex flex-coll gap-2">
-          <Label htmlFor="masUses">Expires At</Label>
+        <div className="flex flex-col gap-2">
+          <Label htmlFor="maxUses">Max Uses</Label>
           <Select value={maxUses} onValueChange={setMaxUses}>
             <SelectTrigger>
               <SelectValue placeholder="Select Max Uses" />
@@ -175,7 +175,9 @@ function CreatedInvite({
         <Input id="url" type="text" value={url} readOnly />
       </div>
       <DialogFooter>
-        <Button variant="secondary" onClick={onClose}></Button>
+        <Button variant="secondary" onClick={onClose}>
+          Close
+        </Button>
         <Button
           onClick={() => {
             navigator.clipboard.writeText(url);
