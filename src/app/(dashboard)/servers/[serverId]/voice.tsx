@@ -19,12 +19,6 @@ export function Voice({ serverId }: { serverId: Id<"servers"> }) {
   const token = useQuery(api.functions.livekit.getToken, { serverId });
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    if (token === undefined) {
-      console.error("Failed to retrieve token");
-    }
-  }, [token]);
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
