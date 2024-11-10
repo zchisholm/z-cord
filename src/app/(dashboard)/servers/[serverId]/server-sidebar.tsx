@@ -14,11 +14,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { api } from "../../../../../convex/_generated/api";
 import { Id } from "../../../../../convex/_generated/dataModel";
+import { CreateChannel } from "./create-channel";
 
 export function ServerSidebar({ id }: { id: Id<"servers"> }) {
   const pathname = usePathname();
   const server = useQuery(api.functions.server.get, { id: id });
-  const channels = useQuery(api.functions.server.channels, {
+  const channels = useQuery(api.functions.channel.list, {
     id: id,
   });
   return (
@@ -27,6 +28,7 @@ export function ServerSidebar({ id }: { id: Id<"servers"> }) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Channels</SidebarGroupLabel>
+          <CreateChannel serverId={id}/>
           <SidebarGroupContent>
             <SidebarMenu>
               {channels?.map((channel) => (
