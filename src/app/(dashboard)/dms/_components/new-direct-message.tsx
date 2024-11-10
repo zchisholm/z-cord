@@ -13,32 +13,19 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { SidebarGroupAction } from "@/components/ui/sidebar";
-import { useMutation } from "convex/react";
+import { useCreateDirectMessage } from "@/hooks/use-create-direct-message";
 import { PlusIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast } from "sonner";
-import { api } from "../../../../../convex/_generated/api";
 
 export function NewDirectMessage() {
   const [open, setOpen] = useState(false);
-  const createDirectMessage = useMutation(api.functions.dm.create);
-  const router = useRouter();
+  const handleCreateDirectMessage = useCreateDirectMessage();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const id = await createDirectMessage({
-        username: e.currentTarget.username.value,
-      });
-      setOpen(false);
-      router.push(`/dms/${id}`);
-    } catch (error) {
-      toast.error("Failed to create direct message", {
-        description:
-          error instanceof Error ? error.message : "An unknown error occurred",
-      });
-    }
+    const username = e.currentTarget.username.value;
+    await handleCreateDirectMessage(username);
+    setOpen(false);
   };
 
   return (
@@ -46,7 +33,7 @@ export function NewDirectMessage() {
       <DialogTrigger asChild>
         <SidebarGroupAction>
           <PlusIcon />
-          <span className="sr-only">New Direct Mesage</span>
+          <span className="sr-only">New Direct Message</span>
         </SidebarGroupAction>
       </DialogTrigger>
       <DialogContent>
@@ -62,7 +49,7 @@ export function NewDirectMessage() {
             <Input id="username" type="text" placeholder="Username" />
           </div>
           <DialogFooter>
-            <Button>Start Direct Message</Button>
+            <Button type="submit">Start Direct Message</Button>
           </DialogFooter>
         </form>
       </DialogContent>

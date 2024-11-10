@@ -12,6 +12,7 @@ import { CheckIcon, MessageCircleIcon, XIcon } from "lucide-react";
 import React from "react";
 import { api } from "../../../../../convex/_generated/api";
 import { cn } from "@/lib/utils";
+import { useCreateDirectMessage } from "@/hooks/use-create-direct-message";
 
 export function PendingFriendsList() {
   const friends = useQuery(api.functions.friends.listPending);
@@ -54,6 +55,7 @@ export function PendingFriendsList() {
 export function AcceptedFriendsList() {
   const friends = useQuery(api.functions.friends.listAccepted);
   const updateStatus = useMutation(api.functions.friends.updateStatus);
+  const handleCreateDirectMessage = useCreateDirectMessage();
 
   return (
     <div className="flex flex-col divide-y">
@@ -72,7 +74,7 @@ export function AcceptedFriendsList() {
           <IconButton
             title="Start DM"
             icon={<MessageCircleIcon />}
-            onClick={() => {}}
+            onClick={() => handleCreateDirectMessage(friend.user.username)}
           />
           <IconButton
             title="Remove Friend"
