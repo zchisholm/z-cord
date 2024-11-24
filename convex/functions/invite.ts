@@ -3,6 +3,7 @@ import { assertServerMember, authenticatedMutation } from "./helpers";
 import { Id } from "../_generated/dataModel";
 import { query, QueryCtx } from "../_generated/server";
 
+// Adding a random comment
 const getInvite = async (ctx: QueryCtx, inviteId: Id<"invites">) => {
   const invite = await ctx.db.get(inviteId);
   if (!invite) {
